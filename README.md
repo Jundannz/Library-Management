@@ -1,4 +1,3 @@
-````markdown
 # 📚 Program Manajemen Perpustakaan C++
 
 Program Manajemen Perpustakaan berbasis C++ ini dibuat untuk mengelola data buku secara terstruktur menggunakan **array**, **struct**, serta algoritma **sorting** dan **searching**. Project ini merupakan implementasi konsep dasar struktur data dalam pengelolaan perpustakaan sederhana.
