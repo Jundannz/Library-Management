@@ -1,7 +1,3 @@
-Berikut **README.md** yang bisa kamu gunakan untuk repositori project:
-
----
-
 ````markdown
 # 📚 Program Manajemen Perpustakaan C++
 
