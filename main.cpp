@@ -247,9 +247,9 @@ void selectSort(Buku buku[], int jumlahBuku){
 int binarySearch(Buku buku[], int jumlahBuku, int targetId, string targetJudul, int pilihanSearch){
     int left = 0;
     int right = jumlahBuku - 1;
-    int mid = left + (right - left) / 2;
     if(pilihanSearch == 1){
         while(left <= right){
+            int mid = left + (right - left) / 2;
             if(buku[mid].id == targetId){
                 return mid;
             }
@@ -257,13 +257,13 @@ int binarySearch(Buku buku[], int jumlahBuku, int targetId, string targetJudul, 
                 left = mid + 1;
             }
             else{
-                right = mid + 1;
+                right = mid - 1;
             }
-            
         }
     }
     else if(pilihanSearch == 2){
         while(left <= right){
+            int mid = left + (right - left) / 2;
             if(buku[mid].judul == targetJudul){
                 return mid;
             }
