@@ -244,7 +244,6 @@ void selectSort(Buku buku[], int jumlahBuku){
     }
 }
 
-
 //Update searching funct
 int binarySearch(Buku buku[], int jumlahBuku, int targetId, string targetJudul, int pilihanSearch){
     int left = 0;
