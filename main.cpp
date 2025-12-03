@@ -17,6 +17,14 @@ Buku rak3[100] = {}; // M - S
 Buku rak4[100] = {}; // T - Z
 Buku rak5[250] = {}; // menampung buku dengan judul non-latin alfabet
 
+// fitur reservasi (menggunakan array, bukan vector)
+struct Reservasi {
+    string nama;
+    string judul;
+};
+Reservasi daftarReservasi[100] = {};
+int jumlahReservasi = 0;
+
 void tentukanRak(Buku varBuku) {
     // tentukan rak berdasarkan alfabet
     if(varBuku.judul.empty()) return;
@@ -86,6 +94,63 @@ string cariLokasi(const Buku &varBuku) {
     return "Lokasi tidak diketahui";
 }
 
+// fitur reservasi (fungsi)
+void reservasiBuku(Buku buku[], int jumlahBuku) {
+    if (jumlahBuku == 0) {
+        cout << "Tidak ada buku dalam perpustakaan." << "\n";
+        return;
+    }
+
+    string judul, nama;
+    cout << "Masukkan judul buku yang ingin direservasi: ";
+    cin.ignore();
+    getline(cin, judul);
+
+    // ubah ke uppercase agar konsisten dengan penyimpanan
+    for (size_t k = 0; k < judul.length(); k++) {
+        if (judul[k] >= 'a' && judul[k] <= 'z') judul[k] = judul[k] + ('A' - 'a');
+    }
+
+    bool ditemukan = false;
+    for (int i = 0; i < jumlahBuku; i++) {
+        if (buku[i].judul == judul) {
+            ditemukan = true;
+            if (buku[i].dipinjam) {
+                cout << "Buku sedang dipinjam. Masukkan nama Anda untuk reservasi: ";
+                getline(cin, nama);
+                if (jumlahReservasi < 100) {
+                    daftarReservasi[jumlahReservasi].nama = nama;
+                    daftarReservasi[jumlahReservasi].judul = judul;
+                    jumlahReservasi++;
+                    cout << "Reservasi berhasil! Anda akan diberi prioritas saat buku kembali." << "\n";
+                } else {
+                    cout << "Daftar reservasi penuh. Tidak dapat menambah reservasi." << "\n";
+                }
+            } else {
+                cout << "Buku sedang tersedia, tidak perlu reservasi." << "\n";
+            }
+            break;
+        }
+    }
+
+    if (!ditemukan) cout << "Buku tidak ditemukan." << "\n";
+}
+
+void cekReservasiSaatKembali(string judul) {
+    for (int i = 0; i < jumlahReservasi; i++) {
+        if (daftarReservasi[i].judul == judul) {
+            cout << "\nBuku ini memiliki reservasi!" << "\n";
+            cout << "Prioritas peminjam berikut: " << daftarReservasi[i].nama << "\n";
+            // hapus entry dengan menggeser sisa array
+            for (int j = i; j < jumlahReservasi - 1; j++) {
+                daftarReservasi[j] = daftarReservasi[j+1];
+            }
+            jumlahReservasi--;
+            return;
+        }
+    }
+}
+
 //display menu
 void tampilanMenu(){
     cout << "=== Menu Perpustakaan ===" << '\n';
@@ -94,6 +159,8 @@ void tampilanMenu(){
     cout << "3. Urutkan Item" << '\n';
     cout << "4. Cari Buku" << '\n';
     cout << "5. Pinjam Buku" << '\n';
+    cout << "6. Kembalikan Buku" << '\n';
+    cout << "7. Reservasi Buku" << '\n';
     cout << "0. Keluar" << '\n';
     cout << "Pilih menu: ";
 }
@@ -333,6 +400,8 @@ void returnBuku(Buku buku[], int jumlahBuku) {
                 } else {
                     cout << "Terima kasih telah mengembalikan tepat waktu.\n";
                 }
+                    // cek apakah ada reservasi untuk buku yang dikembalikan
+                    cekReservasiSaatKembali(buku[i].judul);
             }
             return;
         }
@@ -372,6 +441,9 @@ int main(){
             case 6:
                 returnBuku(buku, jumlahBuku);
                 break;
+            case 7:
+                reservasiBuku(buku, jumlahBuku);
+                break;
             case 0:
                 cout << "Keluar dari program." << '\n';
                 break;
@@ -382,4 +454,3 @@ int main(){
     }while(pilihan != 0);
     return 0;
 }
-    
