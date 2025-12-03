@@ -8,6 +8,7 @@ struct Buku{
     int tahunTerbit;
     string kategori;
 };
+
 //display menu
 void tampilanMenu(){
     cout << "=== Menu Perpustakaan ===" << '\n';
@@ -92,6 +93,7 @@ void selectSort(Buku buku[], int jumlahBuku){
     }
 }
 
+//Update searching funct
 int binarySearch(Buku buku[], int jumlahBuku, int targetId, string targetJudul, int pilihanSearch){
     int left = 0;
     int right = jumlahBuku - 1;
@@ -127,10 +129,44 @@ int binarySearch(Buku buku[], int jumlahBuku, int targetId, string targetJudul, 
 }
 
 int sequencialSearch(Buku buku[], int jumlahBuku, int targetId, string targetJudul, int pilihanSearch){
-    return 0;
+    if(pilihanSearch == 1){
+        for(int i = 0; i<jumlahBuku; i++){
+            if(buku[i].id == targetId){
+                return i;
+            }
+        }
+    }
+    else if(pilihanSearch == 2){
+        for(int i = 0; i<jumlahBuku; i++){
+            if(buku[i].judul == targetJudul){
+                return i;
+            }
+        }
+    }
+    return -1;
 }
-void searchSelect(){
-
+void searchSelect(Buku buku[], int jumlahBuku, int targetId, string targetJudul, int pilihanSearch){
+    int pilihanBuku = 0;
+    cout << "=== Menu Pencarian Buku ===" << "\n\n";
+    cout << "NOTE: Sebelum melakukan pencarian berdasarkan ID, pastikan data sudah diurutkan berdasarkan ID menggunakan opsi 'Urutkan Item'." << '\n';
+    cout << "Dan juga untuk pencarian berdasarkan Judul, pastikan data sudah diurutkan berdasarkan Judul menggunakan opsi 'Urutkan Item'." << '\n';
+    cout << "\nSearch by id(1) atau by judul(2): ";
+    cin >> pilihanBuku;
+    if(pilihanBuku == 1){
+        cout << "Masukkan metode pencarian: Binary Search(1) atau Sequencial Search(2): ";
+        cin >> pilihanSearch;
+        if(pilihanSearch == 1){
+            cout << "Masukkan ID buku yang dicari: ";
+            cin >> targetId;
+            int result = binarySearch(buku, jumlahBuku, targetId, targetJudul, pilihanBuku);
+            if(result != -1){
+                cout << "Buku dengan id " << targetId << " ditemukan pada index ke-" << result << '\n';
+            }
+            else{
+                cout << "Buku dengan id " << targetId << " tidak ditemukan." << '\n';
+            }
+        }
+    }
 }
 
 int main(){
@@ -138,6 +174,10 @@ int main(){
     int jumlahBuku = 0;
     int pilihan;
     int pilihanSorting;
+    int targetId;
+    string targetJudul;
+    int pilihanSearch;
+
     do{
         tampilanMenu();
         cin >> pilihan;
@@ -153,6 +193,7 @@ int main(){
                 selectSort(buku, jumlahBuku);
                 break;
             case 4:
+                searchSelect(buku, jumlahBuku, targetId, targetJudul, pilihanSearch);
                 break;
             case 0:
                 cout << "Keluar dari program." << '\n';
