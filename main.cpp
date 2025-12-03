@@ -346,6 +346,55 @@ void searchSelect(Buku buku[], int jumlahBuku, int targetId, string targetJudul,
             }
         }
     }
+    else if(pilihanBuku == 2){
+        cout << "Masukkan metode pencarian: Binary Search(1) atau Sequencial Search(2): ";
+        cin >> pilihanSearch;
+        if(pilihanSearch == 1){
+            cout << "Masukkan judul buku yang dicari: ";
+            cin.ignore();
+            getline(cin, targetJudul);
+            // ubah ke uppercase untuk matching
+            for (size_t k = 0; k < targetJudul.length(); k++) {
+                if (targetJudul[k] >= 'a' && targetJudul[k] <= 'z') targetJudul[k] = targetJudul[k] + ('A' - 'a');
+            }
+            int result = binarySearch(buku, jumlahBuku, targetId, targetJudul, pilihanBuku);
+            if(result != -1){
+                cout << "Buku dengan judul " << targetJudul << " ditemukan pada index ke-" << result << '\n';
+                cout << "ID: " << buku[result].id << '\n';
+                cout << "Judul: " << buku[result].judul << '\n';
+                cout << "Penulis: " << buku[result].penulis << '\n';
+                cout << "Tahun Terbit: " << buku[result].tahunTerbit << '\n';
+                cout << "Status: " << (buku[result].dipinjam ? "Dipinjam" : "Tersedia") << '\n';
+                cout << "Buku ini berada di rak: " << cariLokasi(buku[result]) << '\n';
+                cout << "------------------------" << '\n';
+            }
+            else{
+                cout << "Buku dengan judul " << targetJudul << " tidak ditemukan." << '\n';
+            }
+        }
+        else if(pilihanSearch == 2){
+            cout << "Masukkan judul buku yang dicari: ";
+            cin.ignore();
+            getline(cin, targetJudul);
+            // ubah ke uppercase untuk matching
+            for (size_t k = 0; k < targetJudul.length(); k++) {
+                if (targetJudul[k] >= 'a' && targetJudul[k] <= 'z') targetJudul[k] = targetJudul[k] + ('A' - 'a');
+            }
+            int result = sequencialSearch(buku, jumlahBuku, targetId, targetJudul, pilihanBuku);
+            if(result != -1){
+                cout << "Buku dengan judul " << targetJudul << " ditemukan pada index ke-" << result << '\n';
+                cout << "ID: " << buku[result].id << '\n';
+                cout << "Judul: " << buku[result].judul << '\n';
+                cout << "Penulis: " << buku[result].penulis << '\n';
+                cout << "Tahun Terbit: " << buku[result].tahunTerbit << '\n';
+                cout << "Status: " << (buku[result].dipinjam ? "Dipinjam" : "Tersedia") << '\n';
+                cout << "Buku ini berada di rak: " << cariLokasi(buku[result]) << '\n';
+            }
+            else{
+                cout << "Buku dengan judul " << targetJudul << " tidak ditemukan." << '\n';
+            }
+        }
+    }
 }
 
 void pinjamBuku(Buku buku[], int jumlahBuku) {
