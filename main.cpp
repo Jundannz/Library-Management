@@ -92,6 +92,47 @@ void selectSort(Buku buku[], int jumlahBuku){
     }
 }
 
+int binarySearch(Buku buku[], int jumlahBuku, int targetId, string targetJudul, int pilihanSearch){
+    int left = 0;
+    int right = jumlahBuku - 1;
+    int mid = left + (right - left) / 2;
+    if(pilihanSearch == 1){
+        while(left <= right){
+            if(buku[mid].id == targetId){
+                return mid;
+            }
+            else if(buku[mid].id < targetId){
+                left = mid + 1;
+            }
+            else{
+                right = mid + 1;
+            }
+            
+        }
+    }
+    else if(pilihanSearch == 2){
+        while(left <= right){
+            if(buku[mid].judul == targetJudul){
+                return mid;
+            }
+            else if(buku[mid].judul < targetJudul){
+                left = mid + 1;
+            }
+            else{
+                right = mid - 1;
+            }
+        }
+    }
+    return -1;
+}
+
+int sequencialSearch(Buku buku[], int jumlahBuku, int targetId, string targetJudul, int pilihanSearch){
+    return 0;
+}
+void searchSelect(){
+
+}
+
 int main(){
     Buku buku[100];
     int jumlahBuku = 0;
