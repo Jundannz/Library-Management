@@ -10,6 +10,82 @@ struct Buku{
     bool dipinjam = false;
 };
 
+//variabel global rak buku
+Buku rak1[100] = {}; // simpan buku dari alfabet A-F
+Buku rak2[100] = {}; // G - L
+Buku rak3[100] = {}; // M - S
+Buku rak4[100] = {}; // T - Z
+Buku rak5[250] = {}; // menampung buku dengan judul non-latin alfabet
+
+void tentukanRak(Buku varBuku) {
+    // tentukan rak berdasarkan alfabet
+    if(varBuku.judul.empty()) return;
+    char c = varBuku.judul[0];
+    if(c >= 'A' && c <= 'F'){
+        for(int i = 0; i < 100; i++) {
+            if(rak1[i].judul == "") {
+                rak1[i] = varBuku;
+                return;
+            }
+        }
+        cout << "Rak 1 penuh!!\n";
+    } else if(c >= 'G' && c <= 'L') {
+        for(int i = 0; i < 100; i++) {
+            if(rak2[i].judul == "") {
+                rak2[i] = varBuku;
+                return;
+            }
+        }
+        cout << "Rak 2 penuh!!\n";
+    } else if(c >= 'M' && c <= 'S') {
+        for(int i = 0; i < 100; i++) {
+            if(rak3[i].judul == "") {
+                rak3[i] = varBuku;
+                return;
+            }
+        }
+        cout << "Rak 3 penuh!!\n";
+    } else if(c >= 'T' && c <= 'Z') {
+        for(int i = 0; i < 100; i++) {
+            if(rak4[i].judul == "") {
+                rak4[i] = varBuku;
+                return;
+            }
+        }
+        cout << "Rak 4 penuh!!\n";
+    } else {
+        for(int i = 0; i < 250; i++) {
+            if(rak5[i].judul == "") {
+                rak5[i] = varBuku;
+                return;
+            }
+        }
+        cout << "Rak 5 penuh!!\n";
+    }
+}
+
+// cari lokasi buku di rak-rak berdasarkan id (atau judul jika id tidak tersedia)
+string cariLokasi(const Buku &varBuku) {
+    for(int i = 0; i < 100; i++){
+        if(rak1[i].judul != "" && rak1[i].id == varBuku.id) return string("Rak 1, posisi ") + to_string(i);
+        if(rak2[i].judul != "" && rak2[i].id == varBuku.id) return string("Rak 2, posisi ") + to_string(i);
+        if(rak3[i].judul != "" && rak3[i].id == varBuku.id) return string("Rak 3, posisi ") + to_string(i);
+        if(rak4[i].judul != "" && rak4[i].id == varBuku.id) return string("Rak 4, posisi ") + to_string(i);
+    }
+    for(int i = 0; i < 250; i++){
+        if(rak5[i].judul != "" && rak5[i].id == varBuku.id) return string("Rak 5, posisi ") + to_string(i);
+    }
+    // fallback: try to deduce by first letter of title
+    if(!varBuku.judul.empty()){
+        char c = varBuku.judul[0];
+        if(c >= 'A' && c <= 'F') return "Rak 1 (posisi tidak diketahui)";
+        if(c >= 'G' && c <= 'L') return "Rak 2 (posisi tidak diketahui)";
+        if(c >= 'M' && c <= 'S') return "Rak 3 (posisi tidak diketahui)";
+        if(c >= 'T' && c <= 'Z') return "Rak 4 (posisi tidak diketahui)";
+    }
+    return "Lokasi tidak diketahui";
+}
+
 //display menu
 void tampilanMenu(){
     cout << "=== Menu Perpustakaan ===" << '\n';
@@ -46,6 +122,8 @@ void tambahBuku(Buku buku[], int &jumlahBuku){
         cout << "Masukkan Tahun Terbit: ";
         cin >> buku[jumlahBuku].tahunTerbit;
         jumlahBuku++;
+        // tentukan rak setelah menambah ke array utama
+        tentukanRak(buku[jumlahBuku-1]);
         cout << "Buku berhasil ditambahkan!" << '\n';
     }
 }
@@ -81,8 +159,7 @@ void displayAllBuku(Buku buku[], int jumlahBuku){
         cout << "Penulis: " << buku[i].penulis << '\n';
         cout << "Tahun Terbit: " << buku[i].tahunTerbit << '\n';
         cout << "------------------------" << '\n';
-        cout << "Status: "
-             << (buku[i].dipinjam ? "Dipinjam" : "Tersedia") << '\n';
+        cout << "Status: " << (buku[i].dipinjam ? "Dipinjam" : "Tersedia") << '\n';
         cout << "-----------------------------\n";
     }
 }
@@ -169,6 +246,17 @@ void searchSelect(Buku buku[], int jumlahBuku, int targetId, string targetJudul,
             int result = binarySearch(buku, jumlahBuku, targetId, targetJudul, pilihanBuku);
             if(result != -1){
                 cout << "Buku dengan id " << targetId << " ditemukan pada index ke-" << result << '\n';
+                for(int i = 0; i<jumlahBuku; i++){
+                    if(buku[i].id == targetId){
+                        cout << "ID: " << buku[i].id << '\n';
+                        cout << "Judul: " << buku[i].judul << '\n';
+                        cout << "Penulis: " << buku[i].penulis << '\n';
+                        cout << "Tahun Terbit: " << buku[i].tahunTerbit << '\n';
+                        cout << "Status: " << (buku[i].dipinjam ? "Dipinjam" : "Tersedia") << '\n';
+                        cout << "Buku ini berada di rak: " << cariLokasi(buku[i]) << '\n';
+                        cout << "------------------------" << '\n';
+                    }
+                }
             }
             else{
                 cout << "Buku dengan id " << targetId << " tidak ditemukan." << '\n';
@@ -180,6 +268,13 @@ void searchSelect(Buku buku[], int jumlahBuku, int targetId, string targetJudul,
             int result = sequencialSearch(buku, jumlahBuku, targetId, targetJudul, pilihanBuku);
             if(result != -1){
                 cout << "Buku dengan id " << targetId << " ditemukan pada index ke-" << result << '\n';
+                // tampilkan detail dan lokasi
+                cout << "ID: " << buku[result].id << '\n';
+                cout << "Judul: " << buku[result].judul << '\n';
+                cout << "Penulis: " << buku[result].penulis << '\n';
+                cout << "Tahun Terbit: " << buku[result].tahunTerbit << '\n';
+                cout << "Status: " << (buku[result].dipinjam ? "Dipinjam" : "Tersedia") << '\n';
+                cout << "Buku ini berada di rak: " << cariLokasi(buku[result]) << '\n';
             }
             else{
                 cout << "Buku dengan id " << targetId << " tidak ditemukan." << '\n';
