@@ -7,6 +7,7 @@ struct Buku{
     string penulis;
     int tahunTerbit;
     string kategori;
+    bool dipinjam = false;
 };
 
 //display menu
@@ -15,9 +16,12 @@ void tampilanMenu(){
     cout << "1. Tambah Buku" << '\n';
     cout << "2. Tampilan buku" << '\n';
     cout << "3. Urutkan Item" << '\n';
+    cout << "4. Cari Buku" << '\n';
+    cout << "5. Pinjam Buku" << '\n';
     cout << "0. Keluar" << '\n';
     cout << "Pilih menu: ";
 }
+
 //fungsi untuk menambah buku
 void tambahBuku(Buku buku[], int &jumlahBuku){
     int n;
@@ -77,6 +81,9 @@ void displayAllBuku(Buku buku[], int jumlahBuku){
         cout << "Penulis: " << buku[i].penulis << '\n';
         cout << "Tahun Terbit: " << buku[i].tahunTerbit << '\n';
         cout << "------------------------" << '\n';
+        cout << "Status: "
+             << (buku[i].dipinjam ? "Dipinjam" : "Tersedia") << '\n';
+        cout << "-----------------------------\n";
     }
 }
 void selectSort(Buku buku[], int jumlahBuku){
@@ -92,6 +99,7 @@ void selectSort(Buku buku[], int jumlahBuku){
         displayAllBuku(buku, jumlahBuku);
     }
 }
+
 
 //Update searching funct
 int binarySearch(Buku buku[], int jumlahBuku, int targetId, string targetJudul, int pilihanSearch){
@@ -166,7 +174,75 @@ void searchSelect(Buku buku[], int jumlahBuku, int targetId, string targetJudul,
                 cout << "Buku dengan id " << targetId << " tidak ditemukan." << '\n';
             }
         }
+        else if(pilihanSearch == 2){
+            cout << "Masukkan ID buku yang dicari: ";
+            cin >> targetId;
+            int result = sequencialSearch(buku, jumlahBuku, targetId, targetJudul, pilihanBuku);
+            if(result != -1){
+                cout << "Buku dengan id " << targetId << " ditemukan pada index ke-" << result << '\n';
+            }
+            else{
+                cout << "Buku dengan id " << targetId << " tidak ditemukan." << '\n';
+            }
+        }
     }
+}
+
+void pinjamBuku(Buku buku[], int jumlahBuku) {
+    sortingById(buku, jumlahBuku);
+    displayAllBuku(buku, jumlahBuku);
+    int id;
+    cout << "Batas pinjam buku adalah 7 hari. Denda sebesar Rp 2000 per hari akan dikenakan jika terlambat mengembalikan.\n";
+    cout << "Masukkan ID buku yang ingin dipinjam: ";
+    cin >> id;
+
+    for (int i = 0; i < jumlahBuku; i++) {
+        if (buku[i].id == id) {
+            if (buku[i].dipinjam) {
+                cout << "Buku sudah dipinjam.\n";
+            } else {
+                buku[i].dipinjam = true;
+                cout << "Buku berhasil dipinjam.\n";
+            }
+            return;
+        }
+    }
+    cout << "Buku tidak ditemukan.\n";
+}
+int hitungDenda() {
+    int hariTerlambat;
+    cout << "Masukkan jumlah hari keterlambatan pengembalian: ";
+    cin >> hariTerlambat;
+    const int DENDA_PER_HARI = 2000;
+    return hariTerlambat * DENDA_PER_HARI;
+}
+
+void returnBuku(Buku buku[], int jumlahBuku) {
+    int id;
+    cout << "Masukkan ID buku yang ingin dikembalikan: ";
+    cin >> id;
+
+    for (int i = 0; i < jumlahBuku; i++) {
+        if (buku[i].id == id) {
+            if (!buku[i].dipinjam) {
+                cout << "Buku ini tidak sedang dipinjam.\n";
+            } else {
+                buku[i].dipinjam = false;
+                cout << "Buku berhasil dikembalikan.\n";
+                cout << "Apakah ada keterlambatan pengembalian? (1: Ya, 2: Tidak): ";
+                int pilihan;
+                cin >> pilihan;
+                if(pilihan == 1) {
+                    int denda = hitungDenda();
+                    cout << "Total denda yang harus dibayar: Rp " << denda << "\n";
+                } else {
+                    cout << "Terima kasih telah mengembalikan tepat waktu.\n";
+                }
+            }
+            return;
+        }
+    }
+    cout << "Buku tidak ditemukan.\n";
 }
 
 int main(){
@@ -195,6 +271,12 @@ int main(){
             case 4:
                 searchSelect(buku, jumlahBuku, targetId, targetJudul, pilihanSearch);
                 break;
+            case 5:
+                pinjamBuku(buku, jumlahBuku);
+                break;
+            case 6:
+                returnBuku(buku, jumlahBuku);
+                break;
             case 0:
                 cout << "Keluar dari program." << '\n';
                 break;
@@ -203,7 +285,6 @@ int main(){
                 break;
         }
     }while(pilihan != 0);
-
     return 0;
 }
     
