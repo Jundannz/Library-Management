@@ -73,15 +73,6 @@ g++ main.cpp -o perpustakaan
 
 ---
 
-## 🚀 Pengembangan Ke Depan
-
-* Penyimpanan data ke file `.txt` / `.json`
-* Penggunaan `vector` agar kapasitas dinamis
-* Penambahan sistem login admin & user
-* Implementasi GUI berbasis Qt atau web
-
----
-
 ## 👤 Dibuat oleh
 
 *1. Jundan Saiful Haq (25/560768/PA/23633)*

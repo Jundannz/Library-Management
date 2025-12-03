@@ -6,7 +6,6 @@ struct Buku{
     string judul;
     string penulis;
     int tahunTerbit;
-    string kategori;
     bool dipinjam = false;
 };
 
