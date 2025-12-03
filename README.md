@@ -85,8 +85,11 @@ g++ main.cpp -o perpustakaan
 ## 👤 Dibuat oleh
 
 *1. Jundan Saiful Haq (25/560768/PA/23633)*
+
 *2. Sanjia Tirta Arraya (25/560949/PA/23645)*
+
 *3. Naufal Abiyan Rizqullah Mashar (25/564266/PA/23753)*
+
 *4. Ainun Nuriah (25/559746/PA/23559)*
 ---
 
