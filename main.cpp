@@ -1,0 +1,127 @@
+#include <iostream>
+using namespace std;
+
+struct Buku{
+    int id;
+    string judul;
+    string penulis;
+    int tahunTerbit;
+    string kategori;
+};
+//display menu
+void tampilanMenu(){
+    cout << "=== Menu Perpustakaan ===" << '\n';
+    cout << "1. Tambah Buku" << '\n';
+    cout << "2. Tampilan buku" << '\n';
+    cout << "3. Urutkan Item" << '\n';
+    cout << "0. Keluar" << '\n';
+    cout << "Pilih menu: ";
+}
+//fungsi untuk menambah buku
+void tambahBuku(Buku buku[], int &jumlahBuku){
+    int n;
+    int panjangBuku;
+    cout << "Masukkan jumlah buku yang akan ditambahkan: ";
+    cin >> n;
+    for(int i = 0; i<n; i++){
+        cout << "Masukkan ID Buku: ";
+        cin >> buku[jumlahBuku].id;
+        cout << "Masukkan Judul Buku: ";
+        cin.ignore();
+        getline(cin, buku[jumlahBuku].judul);
+        //ganti semua karakter menjadi uppercase
+        panjangBuku = buku[jumlahBuku].judul.length();
+        for(int i = 0; i<panjangBuku; i++){
+            if(buku[jumlahBuku].judul[i] >= 'a' && buku[jumlahBuku].judul[i] <= 'z'){
+                buku[jumlahBuku].judul[i] = buku[jumlahBuku].judul[i] + ('A' - 'a');
+            }
+        }
+        cout << "Masukkan Penulis Buku: ";
+        getline(cin, buku[jumlahBuku].penulis);
+        cout << "Masukkan Tahun Terbit: ";
+        cin >> buku[jumlahBuku].tahunTerbit;
+        jumlahBuku++;
+        cout << "Buku berhasil ditambahkan!" << '\n';
+    }
+}
+
+void sortingById(Buku buku[], int jumlahBuku){
+    for(int i = 0; i<jumlahBuku-1; i++){
+        for(int j = 0; j < jumlahBuku - i - 1; j++){
+            if(buku[j].id > buku[j+1].id){
+                Buku temp = buku[j];
+                buku[j] = buku[j+1];
+                buku[j+1] = temp;
+            }
+        }
+    }
+}
+
+void sortingByJudul(Buku buku[], int jumlahBuku){
+    for(int i = 0; i<jumlahBuku-1; i++){
+        for(int j = 0; j < jumlahBuku - i - 1; j++){
+            if(buku[j].judul > buku[j+1].judul){
+                Buku temp = buku[j];
+                buku[j] = buku[j+1];
+                buku[j+1] = temp;
+            }
+        }
+    }
+}
+void displayAllBuku(Buku buku[], int jumlahBuku){
+    cout << "=== Daftar Buku ===" << '\n';
+    for(int i = 0; i<jumlahBuku; i++){
+        cout << "ID: " << buku[i].id << '\n';
+        cout << "Judul: " << buku[i].judul << '\n';
+        cout << "Penulis: " << buku[i].penulis << '\n';
+        cout << "Tahun Terbit: " << buku[i].tahunTerbit << '\n';
+        cout << "------------------------" << '\n';
+    }
+}
+void selectSort(Buku buku[], int jumlahBuku){
+    int pilihanSearch;
+    cout << "Search by id(1) atau by judul(2): ";
+    cin >> pilihanSearch;
+    if(pilihanSearch == 1){
+        sortingById(buku, jumlahBuku);
+        displayAllBuku(buku, jumlahBuku);
+    }
+    else if(pilihanSearch == 2){
+        sortingByJudul(buku, jumlahBuku);
+        displayAllBuku(buku, jumlahBuku);
+    }
+}
+
+int main(){
+    Buku buku[100];
+    int jumlahBuku = 0;
+    int pilihan;
+    int pilihanSorting;
+    do{
+        tampilanMenu();
+        cin >> pilihan;
+        switch (pilihan){
+            case 1:
+                tambahBuku(buku, jumlahBuku);
+                break;
+            case 2:
+                sortingByJudul(buku, jumlahBuku);
+                displayAllBuku(buku, jumlahBuku);
+                break;
+            case 3:
+                selectSort(buku, jumlahBuku);
+                break;
+            case 4:
+                break;
+            case 0:
+                cout << "Keluar dari program." << '\n';
+                break;
+            default:
+                cout << "Pilihan tidak valid. Silakan coba lagi." << '\n';
+                break;
+        }
+    }while(pilihan != 0);
+
+    return 0;
+}
+    
